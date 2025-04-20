@@ -1,0 +1,15 @@
+# Ignore artifacts:
+build
+coverage
+
+# Ignore all HTML files:
+**/*.html
+
+# Ignore config file
+
+/.vscode
+/node_modules
+
+*.env
+.env
+.env.*
