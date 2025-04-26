@@ -1,9 +1,13 @@
 import { v2 as cloudinary } from 'cloudinary';
+import dotenv from 'dotenv';
+import fs from 'fs'
+dotenv.config();
   // Configuration
+  
   cloudinary.config({ 
-    cloud_name:process.env.CLOUDINARY_CLOUD_NAME, 
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
     api_key:process.env.CLOUDINARY_API_KEY, 
-    api_secret: process.env.CLOUDINARY_API_SECRET // Click 'View API Keys' above to copy your API secret
+    api_secret:process.env.CLOUDINARY_API_SECRET // Click 'View API Keys' above to copy your API secret
 });
 
 const uploadOnCloudinary=async(localFilePath)=>{
@@ -16,9 +20,11 @@ const uploadOnCloudinary=async(localFilePath)=>{
               public_id: 'shoes',
           }
       )
-      console.log('file has been uploaded successfully',response.url);
+      fs.unlinkSync(localFilePath);
       return response;
    } catch (error) {
-    
+    fs.unlinkSync(localFilePath);
    }
 }
+
+export {uploadOnCloudinary}
