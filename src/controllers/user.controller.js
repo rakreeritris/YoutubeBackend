@@ -5,6 +5,7 @@ import {uploadOnCloudinary} from '../utils/cloudinary.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
+import { Subscription } from '../models/subscription.model.js';
 const generateAccessAndRefreshToken=async(userId)=>{
     try {
         const user=await User.findById(userId);
@@ -334,6 +335,26 @@ const getWatchHistory=asyncHandler(async(req,res)=>{
         user[0].watchHistory,
         "watchHistory fetched successfully"
     ))
+});
+
+const subscribeChannel=asyncHandler(async(req,res)=>{
+    const subscriber=req.user._id;
+    const {channel}=req.body;
+    if(!subscriber)
+    {
+        throw new ApiError(400,"Subscriber not found");
+    }
+    if(!channel)
+    {
+        throw new ApiError(400,"Channel not found");
+    }
+    const subscription=await Subscription.create({
+        subscriber,
+        channel
+    });
+    res
+    .status(200)
+    .json(new ApiResponse(200,subscription,"Subscribed to the channel successfully"))
 })
 export {registerUser,
     loginUser,
@@ -344,5 +365,6 @@ export {registerUser,
     updateAccountDetails,
     updateUserAvatar,
     getUserChannelProfile,
-    getWatchHistory
+    getWatchHistory,
+    subscribeChannel
 };
